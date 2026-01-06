@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Mail, Lock, Eye, EyeOff } from 'lucide-react';
+import logoImg from '../../assets/logo-name-support-desk.png';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -19,14 +20,13 @@ export default function LoginPage() {
     <div className="flex min-h-screen items-center justify-center bg-slate-50 px-4">
       <div className="w-full max-w-md space-y-8 rounded-lg bg-white p-8 shadow-sm border border-slate-100">
         <div className="flex flex-col items-center">
-          <div>
+          <div className="py-4">
             <Image
-              src="/logo-name-support-desk.png"
+              src={logoImg}
               alt="SupportDesk Pro Logo"
               width={350}
-              height={90}
               priority
-              className="object-contain"
+              className="object-contain h-auto"
             />
           </div>
           <h2 className="text-center text-xl font-medium text-slate-500">
