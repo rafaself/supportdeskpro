@@ -5,6 +5,8 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Mail, Lock, Eye, EyeOff } from 'lucide-react';
 import logoImg from '../../assets/logo-name-support-desk.png';
+import { Button } from '../../components/ui/Button';
+import { Input } from '../../components/ui/Input';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -35,74 +37,53 @@ export default function LoginPage() {
         </div>
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div className="flex flex-col gap-4">
-            <div className="relative group">
-              <label htmlFor="email-address" className="sr-only">
-                Email address
-              </label>
-              <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none z-20">
-                <Mail className="h-5 w-5 text-slate-500 group-focus-within:text-primary transition-colors" aria-hidden="true" />
-              </div>
-              <input
-                id="email-address"
-                name="email"
-                type="email"
-                autoComplete="email"
-                required
-                className="relative block w-full rounded-md border border-slate-400 pl-10 px-3 py-2 text-slate-900 placeholder-slate-500 focus:z-10 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary sm:text-sm bg-white transition-all"
-                placeholder="Email address"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </div>
-            <div className="relative group">
-              <label htmlFor="password" className="sr-only">
-                Password
-              </label>
-              <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none z-20">
-                <Lock className="h-5 w-5 text-slate-500 group-focus-within:text-primary transition-colors" aria-hidden="true" />
-              </div>
-              <input
-                id="password"
-                name="password"
-                type={showPassword ? 'text' : 'password'}
-                autoComplete="current-password"
-                required
-                className="relative block w-full rounded-md border border-slate-400 pl-10 pr-10 px-3 py-2 text-slate-900 placeholder-slate-500 focus:z-10 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary sm:text-sm bg-white transition-all"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-              <button
-                type="button"
-                className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer text-slate-500 hover:text-primary z-20 transition-colors"
-                onClick={(e) => {
-                  e.preventDefault();
-                  setShowPassword(!showPassword);
-                }}
-                aria-label={showPassword ? "Hide password" : "Show password"}
-              >
-                {showPassword ? (
-                  <EyeOff className="h-5 w-5" aria-hidden="true" />
-                ) : (
-                  <Eye className="h-5 w-5" aria-hidden="true" />
-                )}
-              </button>
-            </div>
+            <Input
+              id="email-address"
+              type="email"
+              autoComplete="email"
+              required
+              placeholder="Email address"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              icon={<Mail className="h-5 w-5" aria-hidden="true" />}
+            />
+
+            <Input
+              id="password"
+              type={showPassword ? 'text' : 'password'}
+              autoComplete="current-password"
+              required
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              icon={<Lock className="h-5 w-5" aria-hidden="true" />}
+              rightElement={
+                <button
+                  type="button"
+                  className="cursor-pointer text-slate-500 hover:text-indigo-600 transition-colors focus:outline-none"
+                  onClick={() => setShowPassword(!showPassword)}
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                >
+                  {showPassword ? (
+                    <EyeOff className="h-5 w-5" aria-hidden="true" />
+                  ) : (
+                    <Eye className="h-5 w-5" aria-hidden="true" />
+                  )}
+                </button>
+              }
+            />
           </div>
 
           <div className="space-y-4">
-            <button
-              type="submit"
-              className="group relative flex w-full justify-center rounded-md border border-transparent bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-all cursor-pointer"
-            >
+            <Button type="submit" className="w-full">
               Sign in
-            </button>
+            </Button>
 
             <div className="text-center text-sm">
               <span className="text-slate-500">Don&apos;t have an account? </span>
               <Link 
                 href="/register" 
-                className="font-medium text-primary hover:underline transition-colors"
+                className="font-medium text-indigo-600 hover:underline transition-colors"
               >
                 Sign up
               </Link>

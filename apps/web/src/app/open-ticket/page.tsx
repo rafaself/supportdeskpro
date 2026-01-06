@@ -1,11 +1,14 @@
 'use client';
 
 import { useState } from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
-import { ChevronDown, Ticket, CheckCircle2, AlertCircle } from 'lucide-react';
-import logoImg from '../../assets/logo-name-support-desk.png';
+import { Ticket, CheckCircle2, AlertCircle } from 'lucide-react';
 import { createTicketMock } from '../../mocks/tickets';
+import { Button } from '../../components/ui/Button';
+import { Input } from '../../components/ui/Input';
+import { Select } from '../../components/ui/Select';
+import { Textarea } from '../../components/ui/Textarea';
+import { Header } from '../../components/layout/Header';
 
 export default function OpenTicketPage() {
   const [title, setTitle] = useState('');
@@ -31,7 +34,6 @@ export default function OpenTicketPage() {
         priority,
       });
       setSuccess(true);
-      // Reset form
       setTitle('');
       setDescription('');
       setCategory('');
@@ -45,19 +47,7 @@ export default function OpenTicketPage() {
 
   return (
     <div className="min-h-screen bg-[#eef2ff] pb-12 font-sans text-slate-900">
-      {/* Top Navigation / Logo Area */}
-      <header className="px-6 py-4">
-        <div className="mx-auto max-w-7xl">
-          <Link href="/" className="inline-block">
-            <Image
-              src={logoImg}
-              alt="SupportDesk Pro"
-              width={200}
-              className="object-contain"
-            />
-          </Link>
-        </div>
-      </header>
+      <Header />
 
       <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Page Header */}
@@ -101,98 +91,64 @@ export default function OpenTicketPage() {
               )}
 
               <form onSubmit={handleSubmit} className="space-y-6">
-                {/* Title */}
-                <div>
-                  <label htmlFor="title" className="block text-sm font-medium text-slate-700">
-                    Title <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    id="title"
-                    required
+                <Input
+                  id="title"
+                  label="Title"
+                  required
+                  disabled={loading}
+                  placeholder="Example: I can't access..."
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  className="bg-slate-50 focus:bg-white"
+                />
+
+                <Textarea
+                  id="description"
+                  label="Description"
+                  required
+                  rows={6}
+                  disabled={loading}
+                  placeholder="Explain what happened, the steps you tried, and if any error messages appeared."
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  helperText="Tip: Include what you were doing before the mistake."
+                  characterCount={description.length}
+                  maxCharacters={4000}
+                  className="bg-slate-50 focus:bg-white"
+                />
+
+                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                  <Select
+                    id="category"
+                    label="Category"
                     disabled={loading}
-                    className="mt-2 block w-full rounded-lg border border-slate-300 bg-slate-50 px-4 py-3 text-slate-900 placeholder-slate-400 focus:border-indigo-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-indigo-500/10 sm:text-sm transition-all disabled:opacity-60"
-                    placeholder="Example: I can't access..."
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
+                    value={category}
+                    onChange={(e) => setCategory(e.target.value)}
+                    options={[
+                      { value: 'technical', label: 'Technical Issue' },
+                      { value: 'billing', label: 'Billing' },
+                      { value: 'feature', label: 'Feature Request' },
+                      { value: 'other', label: 'Other' },
+                    ]}
+                    className="bg-slate-50 focus:bg-white"
+                  />
+
+                  <Select
+                    id="priority"
+                    label="Priority"
+                    disabled={loading}
+                    value={priority}
+                    onChange={(e) => setPriority(e.target.value)}
+                    options={[
+                      { value: 'low', label: 'Low' },
+                      { value: 'medium', label: 'Medium' },
+                      { value: 'high', label: 'High' },
+                      { value: 'critical', label: 'Critical' },
+                    ]}
+                    className="bg-slate-50 focus:bg-white"
                   />
                 </div>
 
-                {/* Description */}
-                <div>
-                  <label htmlFor="description" className="block text-sm font-medium text-slate-700">
-                    Description <span className="text-red-500">*</span>
-                  </label>
-                  <div className="mt-2 relative">
-                    <textarea
-                      id="description"
-                      rows={6}
-                      required
-                      disabled={loading}
-                      className="block w-full resize-y rounded-lg border border-slate-300 bg-slate-50 px-4 py-3 text-slate-900 placeholder-slate-400 focus:border-indigo-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-indigo-500/10 sm:text-sm transition-all disabled:opacity-60"
-                      placeholder="Explain what happened, the steps you tried, and if any error messages appeared."
-                      value={description}
-                      onChange={(e) => setDescription(e.target.value)}
-                    />
-                    <div className="mt-2 flex justify-between text-xs text-slate-400">
-                      <span>Tip: Include what you were doing before the mistake.</span>
-                      <span>{description.length}/4000</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Category & Priority */}
-                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-                  <div>
-                    <label htmlFor="category" className="block text-sm font-medium text-slate-700">
-                      Category
-                    </label>
-                    <div className="relative mt-2">
-                      <select
-                        id="category"
-                        disabled={loading}
-                        className="block w-full appearance-none rounded-lg border border-slate-300 bg-slate-50 px-4 py-3 text-slate-900 focus:border-indigo-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-indigo-500/10 sm:text-sm transition-all disabled:opacity-60"
-                        value={category}
-                        onChange={(e) => setCategory(e.target.value)}
-                      >
-                        <option value="" disabled>Select...</option>
-                        <option value="technical">Technical Issue</option>
-                        <option value="billing">Billing</option>
-                        <option value="feature">Feature Request</option>
-                        <option value="other">Other</option>
-                      </select>
-                      <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-slate-500">
-                        <ChevronDown className="h-4 w-4" />
-                      </div>
-                    </div>
-                  </div>
-
-                  <div>
-                    <label htmlFor="priority" className="block text-sm font-medium text-slate-700">
-                      Priority
-                    </label>
-                    <div className="relative mt-2">
-                      <select
-                        id="priority"
-                        disabled={loading}
-                        className="block w-full appearance-none rounded-lg border border-slate-300 bg-slate-50 px-4 py-3 text-slate-900 focus:border-indigo-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-indigo-500/10 sm:text-sm transition-all disabled:opacity-60"
-                        value={priority}
-                        onChange={(e) => setPriority(e.target.value)}
-                      >
-                        <option value="" disabled>Select...</option>
-                        <option value="low">Low</option>
-                        <option value="medium">Medium</option>
-                        <option value="high">High</option>
-                        <option value="critical">Critical</option>
-                      </select>
-                      <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-slate-500">
-                        <ChevronDown className="h-4 w-4" />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Attachment */}
                 <div>
                   <div className="flex items-center justify-between">
                     <label className="block text-sm font-medium text-slate-700">Attachment</label>
@@ -200,12 +156,9 @@ export default function OpenTicketPage() {
                   </div>
                   <div className="mt-2 rounded-lg border border-dashed border-slate-300 bg-slate-50 p-6 transition-all hover:bg-slate-100">
                     <div className="flex flex-col items-center justify-center text-center sm:flex-row sm:justify-start sm:text-left">
-                      <button
-                        type="button"
-                        className="mb-2 inline-flex items-center rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:mb-0 sm:mr-4 cursor-pointer"
-                      >
+                      <Button variant="primary" type="button" className="mb-2 sm:mb-0 sm:mr-4">
                         Browse...
-                      </button>
+                      </Button>
                       <span className="text-sm text-slate-500">No files selected.</span>
                     </div>
                     <p className="mt-2 text-xs text-slate-400">
@@ -214,15 +167,10 @@ export default function OpenTicketPage() {
                   </div>
                 </div>
 
-                {/* Submit Button */}
                 <div className="pt-4">
-                  <button
-                    type="submit"
-                    disabled={loading}
-                    className="w-full rounded-xl bg-indigo-600 px-6 py-4 text-base font-semibold text-white shadow-md shadow-indigo-200 transition-all hover:bg-indigo-700 hover:shadow-lg hover:shadow-indigo-300 focus:outline-none focus:ring-4 focus:ring-indigo-500/30 disabled:opacity-70 disabled:cursor-not-allowed"
-                  >
-                    {loading ? 'Sending...' : 'Send Ticket'}
-                  </button>
+                  <Button type="submit" isLoading={loading} className="w-full py-4 text-base shadow-md">
+                    Send Ticket
+                  </Button>
                   <p className="mt-4 text-center text-xs text-slate-500">
                     Upon submission, your ticket will be created with an initial status of <span className="font-medium text-indigo-600">open</span>.
                   </p>
@@ -231,35 +179,20 @@ export default function OpenTicketPage() {
             </div>
           </div>
 
-          {/* Right Column: Sidebar */}
           <div className="space-y-6 lg:col-span-1">
-            {/* Tips Card */}
             <div className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200/50">
               <h4 className="flex items-center text-base font-semibold text-slate-900">
                 <AlertCircle className="mr-2 h-5 w-5 text-indigo-500" />
                 Tips for faster resolution
               </h4>
               <ul className="mt-4 space-y-3 text-sm text-slate-600">
-                <li className="flex items-start">
-                  <span className="mr-2">•</span>
-                  Include a step-by-step description of what you did.
-                </li>
-                <li className="flex items-start">
-                  <span className="mr-2">•</span>
-                  If there was an error message, copy the exact text.
-                </li>
-                <li className="flex items-start">
-                  <span className="mr-2">•</span>
-                  Attach screenshots.
-                </li>
-                <li className="flex items-start">
-                  <span className="mr-2">•</span>
-                  Please specify your device and browser (e.g., Chrome on your mobile phone).
-                </li>
+                <li className="flex items-start"><span className="mr-2">•</span> Include a step-by-step description of what you did.</li>
+                <li className="flex items-start"><span className="mr-2">•</span> If there was an error message, copy the exact text.</li>
+                <li className="flex items-start"><span className="mr-2">•</span> Attach screenshots.</li>
+                <li className="flex items-start"><span className="mr-2">•</span> Please specify your device and browser.</li>
               </ul>
             </div>
-
-            {/* What Happens Next Card */}
+            
             <div className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200/50">
               <h4 className="flex items-center text-base font-semibold text-slate-900">
                 <CheckCircle2 className="mr-2 h-5 w-5 text-indigo-500" />
@@ -268,24 +201,15 @@ export default function OpenTicketPage() {
               <ol className="mt-4 space-y-4 text-sm text-slate-600">
                 <li className="flex gap-3">
                   <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-indigo-50 text-xs font-bold text-indigo-600">1</span>
-                  <span>
-                    <strong className="block font-medium text-slate-900">Screening:</strong> 
-                    Your request is placed in a queue and reviewed by the team.
-                  </span>
+                  <span><strong className="block font-medium text-slate-900">Screening:</strong> Your request is placed in a queue.</span>
                 </li>
                 <li className="flex gap-3">
-                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-indigo-50 text-xs font-bold text-indigo-600">2</span>
-                  <span>
-                    <strong className="block font-medium text-slate-900">Response:</strong> 
-                    An agent responds with guidance or requests more details.
-                  </span>
+                   <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-indigo-50 text-xs font-bold text-indigo-600">2</span>
+                   <span><strong className="block font-medium text-slate-900">Response:</strong> An agent responds with guidance.</span>
                 </li>
                 <li className="flex gap-3">
-                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-indigo-50 text-xs font-bold text-indigo-600">3</span>
-                  <span>
-                    <strong className="block font-medium text-slate-900">Resolution:</strong> 
-                    When resolved, the status changes to done.
-                  </span>
+                   <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-indigo-50 text-xs font-bold text-indigo-600">3</span>
+                   <span><strong className="block font-medium text-slate-900">Resolution:</strong> Status changes to done.</span>
                 </li>
               </ol>
             </div>

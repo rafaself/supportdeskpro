@@ -14,9 +14,11 @@ import {
   User,
   Paperclip
 } from 'lucide-react';
-import logoImg from '../../../assets/logo-name-support-desk.png';
 import paymentFailedImg from '../../../assets/payment-failed.png';
 import { getTicketsMock, TicketData, replyTicketMock, ActivityData } from '../../../mocks/tickets';
+import { Button } from '../../../components/ui/Button';
+import { Badge } from '../../../components/ui/Badge';
+import { Header } from '../../../components/layout/Header';
 
 export default function TicketDetailsPage() {
   const params = useParams();
@@ -35,11 +37,9 @@ export default function TicketDetailsPage() {
     const fetchTicket = async () => {
       try {
         const response = await getTicketsMock();
-        // Simulate finding the specific ticket or default to the first one for demo
         const foundTicket = response.data.find(t => t.id === ticketId) || response.data[0];
         setTicket(foundTicket);
         
-        // Initialize with a system message
         setActivities([
           {
             id: 'system-1',
@@ -59,7 +59,6 @@ export default function TicketDetailsPage() {
   }, [ticketId]);
 
   const handleReply = async () => {
-    // Validation
     if (!replyText.trim()) {
       setReplyError('Please enter a message to reply.');
       return;
@@ -82,26 +81,10 @@ export default function TicketDetailsPage() {
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case 'open':
-        return (
-          <span className="inline-flex items-center rounded-full bg-indigo-50 px-3 py-1 text-sm font-medium text-indigo-700 ring-1 ring-inset ring-indigo-700/10">
-            Open
-          </span>
-        );
-      case 'in_progress':
-        return (
-          <span className="inline-flex items-center rounded-full bg-yellow-50 px-3 py-1 text-sm font-medium text-yellow-800 ring-1 ring-inset ring-yellow-600/20">
-            In Progress
-          </span>
-        );
-      case 'closed':
-        return (
-          <span className="inline-flex items-center rounded-full bg-slate-50 px-3 py-1 text-sm font-medium text-slate-600 ring-1 ring-inset ring-slate-500/10">
-            Closed
-          </span>
-        );
-      default:
-        return null;
+      case 'open': return <Badge variant="info">Open</Badge>;
+      case 'in_progress': return <Badge variant="warning">In Progress</Badge>;
+      case 'closed': return <Badge variant="neutral">Closed</Badge>;
+      default: return null;
     }
   };
 
@@ -128,27 +111,9 @@ export default function TicketDetailsPage() {
 
   return (
     <div className="min-h-screen bg-[#eef2ff] pb-12 font-sans text-slate-900">
-      {/* Top Navigation */}
-      <header className="px-6 py-4">
-        <div className="mx-auto flex max-w-7xl items-center justify-between">
-          <Link href="/" className="inline-block">
-            <Image
-              src={logoImg}
-              alt="SupportDesk Pro"
-              width={200}
-              className="object-contain"
-            />
-          </Link>
-          <div className="flex items-center gap-4">
-             <div className="h-8 w-8 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 font-bold text-xs">
-              JD
-            </div>
-          </div>
-        </div>
-      </header>
+      <Header />
 
       <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        {/* Breadcrumb / Back Navigation */}
         <div className="mb-6">
           <Link 
             href="/" 
@@ -183,7 +148,6 @@ export default function TicketDetailsPage() {
                 <p className="text-slate-600 leading-relaxed whitespace-pre-wrap">
                   {ticket.description}
                 </p>
-                {/* Mock extended description content for demo */}
                 <p className="mt-4 text-slate-600 leading-relaxed">
                   I was trying to process a payment for the premium plan subscription. 
                   After entering my credit card details and clicking "Submit", the page loaded for about 30 seconds and then showed a generic error message.
@@ -191,7 +155,6 @@ export default function TicketDetailsPage() {
                 </p>
               </div>
 
-              {/* Attachment Section */}
               <div className="mt-8 border-t border-slate-100 pt-6">
                 <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wide mb-4 flex items-center gap-2">
                    <Paperclip className="h-4 w-4" />
@@ -273,13 +236,13 @@ export default function TicketDetailsPage() {
                         )}
 
                         <div className="mt-2 flex justify-end">
-                           <button 
+                           <Button 
                              onClick={handleReply}
                              disabled={isReplying}
-                             className="cursor-pointer rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                             isLoading={isReplying}
                            >
-                              {isReplying ? 'Sending...' : 'Reply'}
-                           </button>
+                              Reply
+                           </Button>
                         </div>
                      </div>
                   </div>
@@ -287,7 +250,6 @@ export default function TicketDetailsPage() {
             </div>
           </div>
 
-          {/* Right Column: Meta Info */}
           <div className="lg:col-span-1 space-y-6">
             <div className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200/50">
                <h3 className="font-semibold text-slate-900 mb-4">Ticket Info</h3>
