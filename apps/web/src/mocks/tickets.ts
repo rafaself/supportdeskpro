@@ -10,6 +10,14 @@ export interface TicketData {
   createdAt: string;
 }
 
+export interface ActivityData {
+  id: string;
+  type: 'system' | 'message';
+  content: string;
+  author?: string;
+  createdAt: string;
+}
+
 export const createTicketMock = async (
   ticket: Omit<TicketData, 'id' | 'status' | 'createdAt'>
 ) => {
@@ -46,4 +54,15 @@ export const getTicketsMock = async () => {
   ];
 
   return mockRequest(tickets);
+};
+
+export const replyTicketMock = async (ticketId: string, message: string) => {
+  const newActivity: ActivityData = {
+    id: Math.random().toString(36).substring(7),
+    type: 'message',
+    content: message,
+    author: 'JD', // Mocked current user
+    createdAt: new Date().toISOString(),
+  };
+  return mockRequest(newActivity);
 };

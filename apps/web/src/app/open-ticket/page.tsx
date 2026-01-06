@@ -202,7 +202,7 @@ export default function OpenTicketPage() {
                     <div className="flex flex-col items-center justify-center text-center sm:flex-row sm:justify-start sm:text-left">
                       <button
                         type="button"
-                        className="mb-2 inline-flex items-center rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:mb-0 sm:mr-4"
+                        className="mb-2 inline-flex items-center rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:mb-0 sm:mr-4 cursor-pointer"
                       >
                         Browse...
                       </button>
