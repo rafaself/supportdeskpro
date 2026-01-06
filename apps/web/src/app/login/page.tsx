@@ -24,7 +24,7 @@ export default function LoginPage() {
             <Image
               src={logoImg}
               alt="SupportDesk Pro Logo"
-              width={350}
+              width={280}
               priority
               className="object-contain h-auto"
             />
